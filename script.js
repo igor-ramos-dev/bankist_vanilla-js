@@ -61,6 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// DISPLAY MOVEMENTS ON INTERFACE
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
 
@@ -79,9 +80,16 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
 displayMovements(account1.movements);
 
+// CALCULATE THE MOVEMENTS FOR EACH ACCOUNT
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((a, cv) => a + cv, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcDisplayBalance(account1.movements);
+
+// CREATE USERNAME LOGIN FOR EACH ACCOUNT
 const createUsernames = function (accounts) {
   accounts.forEach(account => {
     account.username = account.owner
@@ -91,10 +99,8 @@ const createUsernames = function (accounts) {
       .join('');
   });
 };
-
 createUsernames(accounts);
 
-/////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
