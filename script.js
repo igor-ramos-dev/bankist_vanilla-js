@@ -89,6 +89,7 @@ const calcDisplayBalance = function (movements) {
 };
 calcDisplayBalance(account1.movements);
 
+// CALCULATE THE INCOMES, OUTCOMES AND INTERESTS
 const calcDisplaySummary = function (movements) {
   const incomes = movements
     .filter(mov => mov > 0)
@@ -98,7 +99,14 @@ const calcDisplaySummary = function (movements) {
   const outcomes = movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumOut.textContent = outcomes + '€';
+  labelSumOut.textContent = Math.abs(outcomes) + '€';
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(int => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = interest + '€';
 };
 calcDisplaySummary(account1.movements);
 
