@@ -28,7 +28,7 @@ const account3 = {
 
 const account4 = {
   owner: 'Sarah Smith',
-  movements: [430, 1000, 700, 50, 90],
+  movements: [430, 1000, 700, 50, 90, -550],
   interestRate: 1,
   pin: 4444,
 };
@@ -89,25 +89,24 @@ const calcDisplayBalance = function (currentAccount) {
 };
 
 // CALCULATE THE INCOMES, OUTCOMES AND INTERESTS
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (currentAccount) {
+  const incomes = currentAccount.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => acc + cur, 0);
   labelSumIn.textContent = incomes + '€';
 
-  const outcomes = movements
+  const outcomes = currentAccount.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
   labelSumOut.textContent = Math.abs(outcomes) + '€';
 
-  const interest = movements
+  const interest = currentAccount.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * 1.2) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = interest + '€';
+  labelSumInterest.textContent = interest.toFixed(2) + '€';
 };
-calcDisplaySummary(account1.movements);
 
 // CREATE USERNAME LOGIN FOR EACH ACCOUNT
 const createUsernames = function (accounts) {
@@ -138,8 +137,12 @@ btnLogin.addEventListener('click', event => {
   if (currentAccount.pin !== +inputLoginPin.value)
     return console.log('Incorrect Password!');
 
-  // Calculate the balance and display in screen
+  // Calculate the balance for the current account and display in screen
   calcDisplayBalance(currentAccount);
+
+  // Calculate the incomes, outcomes and interest
+  // for the current account and display in screen
+  calcDisplaySummary(currentAccount);
 });
 
 /////////////////////////////////////////////////
