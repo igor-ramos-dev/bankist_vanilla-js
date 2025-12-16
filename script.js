@@ -136,6 +136,10 @@ btnLogin.addEventListener('click', event => {
   if (currentAccount.pin !== +inputLoginPin.value)
     return console.log('Incorrect Password!');
 
+  // Display the UI and welcome message
+  labelWelcome.textContent = `Welcome back, ${currentAccount.owner}!!!!`;
+  containerApp.style.opacity = '1';
+
   // Display all the movements in screen
   displayMovements(currentAccount);
 
