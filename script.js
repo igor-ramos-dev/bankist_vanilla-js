@@ -7,7 +7,7 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300, 60],
   interestRate: 1.2, // %
   pin: 1111,
 };
@@ -82,12 +82,11 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
-// CALCULATE THE MOVEMENTS FOR EACH ACCOUNT
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((a, cv) => a + cv, 0);
+// CALCULATE THE BALANCE FOR CURRENT ACCOUNT
+const calcDisplayBalance = function (currentAccount) {
+  const balance = currentAccount.movements.reduce((a, cv) => a + cv, 0);
   labelBalance.textContent = `${balance} €`;
 };
-calcDisplayBalance(account1.movements);
 
 // CALCULATE THE INCOMES, OUTCOMES AND INTERESTS
 const calcDisplaySummary = function (movements) {
@@ -138,6 +137,9 @@ btnLogin.addEventListener('click', event => {
   // Check if username's password is correct
   if (currentAccount.pin !== +inputLoginPin.value)
     return console.log('Incorrect Password!');
+
+  // Calculate the balance and display in screen
+  calcDisplayBalance(currentAccount);
 });
 
 /////////////////////////////////////////////////
