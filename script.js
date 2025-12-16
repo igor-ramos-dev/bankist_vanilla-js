@@ -62,10 +62,10 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // DISPLAY MOVEMENTS ON INTERFACE
-const displayMovements = function (movements) {
+const displayMovements = function (currentAccount) {
   containerMovements.innerHTML = '';
 
-  movements.map((mov, index) => {
+  currentAccount.movements.map((mov, index) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -80,7 +80,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 // CALCULATE THE BALANCE FOR CURRENT ACCOUNT
 const calcDisplayBalance = function (currentAccount) {
@@ -136,6 +135,9 @@ btnLogin.addEventListener('click', event => {
   // Check if username's password is correct
   if (currentAccount.pin !== +inputLoginPin.value)
     return console.log('Incorrect Password!');
+
+  // Display all the movements in screen
+  displayMovements(currentAccount);
 
   // Calculate the balance for the current account and display in screen
   calcDisplayBalance(currentAccount);
