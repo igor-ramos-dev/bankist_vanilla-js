@@ -122,6 +122,24 @@ const createUsernames = function (accounts) {
 };
 createUsernames(accounts);
 
+// Event Handler
+let currentAccount;
+
+btnLogin.addEventListener('click', event => {
+  event.preventDefault();
+
+  // Check if username exists
+  // If not, display error message
+  currentAccount = accounts.find(account => {
+    return account.username === inputLoginUsername.value;
+  });
+  if (!currentAccount) return console.log('Username does not exists!');
+
+  // Check if username's password is correct
+  if (currentAccount.pin !== +inputLoginPin.value)
+    return console.log('Incorrect Password!');
+});
+
 /////////////////////////////////////////////////
 // LECTURES
 
