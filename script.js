@@ -156,7 +156,7 @@ btnLogin.addEventListener('click', event => {
   inputLoginPin.blur();
 });
 
-// Transfer money to another account
+// Transfer money
 btnTransfer.addEventListener('click', event => {
   event.preventDefault();
 
@@ -166,12 +166,19 @@ btnTransfer.addEventListener('click', event => {
   });
   if (!transferToAccount) return console.log('User does not exists!');
 
-  // Add the value to one account and retrive from another
+  // Check if the value to transfer is greater than the actual balance
+  const balance = currentAccount.movements.reduce((acc, mov) => acc + mov, 0);
+  if (+inputTransferAmount.value > balance)
+    return console.log('Not sufficient founds!');
+
+  // If not, make the transfer
   transferToAccount.movements.push(+inputTransferAmount.value);
 
   // Recalculate the balance for the current account
   currentAccount.movements.push(-+inputTransferAmount.value);
   calcDisplayBalance(currentAccount);
+  displayMovements(currentAccount);
+  calcDisplaySummary(currentAccount);
 
   // Clear input fields
   inputTransferTo.value = inputTransferAmount.value = '';
