@@ -101,7 +101,7 @@ const calcDisplaySummary = function (currentAccount) {
 
   const interest = currentAccount.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * currentAccount.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = interest.toFixed(2) + '€';
@@ -119,9 +119,8 @@ const createUsernames = function (accounts) {
 };
 createUsernames(accounts);
 
-// Event Handler
+// Make login
 let currentAccount;
-
 btnLogin.addEventListener('click', event => {
   event.preventDefault();
 
@@ -137,7 +136,9 @@ btnLogin.addEventListener('click', event => {
     return console.log('Incorrect Password!');
 
   // Display the UI and welcome message
-  labelWelcome.textContent = `Welcome back, ${currentAccount.owner}!!!!`;
+  labelWelcome.textContent = `Welcome back, ${
+    currentAccount.owner.split(' ')[0]
+  }!`;
   containerApp.style.opacity = '1';
 
   // Display all the movements in screen
@@ -149,6 +150,32 @@ btnLogin.addEventListener('click', event => {
   // Calculate the incomes, outcomes and interest
   // for the current account and display in screen
   calcDisplaySummary(currentAccount);
+
+  // When logged, clear username and pin fields
+  inputLoginPin.value = inputLoginUsername.value = '';
+  inputLoginPin.blur();
+});
+
+// Transfer money to another account
+btnTransfer.addEventListener('click', event => {
+  event.preventDefault();
+
+  // Account which will receive the transfer
+  const transferToAccount = accounts.find(acc => {
+    return acc.owner.toLowerCase() === inputTransferTo.value.toLowerCase();
+  });
+  if (!transferToAccount) return console.log('User does not exists!');
+
+  // Add the value to one account and retrive from another
+  transferToAccount.movements.push(+inputTransferAmount.value);
+
+  // Recalculate the balance for the current account
+  currentAccount.movements.push(-+inputTransferAmount.value);
+  calcDisplayBalance(currentAccount);
+
+  // Clear input fields
+  inputTransferTo.value = inputTransferAmount.value = '';
+  inputTransferAmount.blur();
 });
 
 /////////////////////////////////////////////////
@@ -171,4 +198,3 @@ const totalDepositsUSD = movements
   .filter(mov => mov > 0)
   .map(mov => mov * eurToUsd)
   .reduce((acc, cur) => acc + cur, 0);
-console.log(totalDepositsUSD);
