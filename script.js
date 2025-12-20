@@ -61,7 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-// DISPLAY MOVEMENTS ON INTERFACE
+// Display movements on interface
 const displayMovements = function (currentAccount) {
   containerMovements.innerHTML = '';
 
@@ -81,7 +81,7 @@ const displayMovements = function (currentAccount) {
   });
 };
 
-// CALCULATE THE BALANCE FOR CURRENT ACCOUNT
+// Calculate the balance for current account
 const calcDisplayBalance = function (currentAccount) {
   currentAccount.balance = currentAccount.movements.reduce((a, cv) => {
     return a + cv;
@@ -89,7 +89,7 @@ const calcDisplayBalance = function (currentAccount) {
   labelBalance.textContent = `${currentAccount.balance} €`;
 };
 
-// CALCULATE THE INCOMES, OUTCOMES AND INTERESTS
+// Calculate the incomes, outcomes and interest
 const calcDisplaySummary = function (currentAccount) {
   const incomes = currentAccount.movements
     .filter(mov => mov > 0)
@@ -109,7 +109,20 @@ const calcDisplaySummary = function (currentAccount) {
   labelSumInterest.textContent = interest.toFixed(2) + '€';
 };
 
-// CREATE USERNAME LOGIN FOR EACH ACCOUNT
+// Update interface of the application
+const updateUI = function (currentAccount) {
+  // Display all the movements in screen
+  displayMovements(currentAccount);
+
+  // Calculate the balance for the current account and display in screen
+  calcDisplayBalance(currentAccount);
+
+  // Calculate the incomes, outcomes and interest
+  // for the current account and display in screen
+  calcDisplaySummary(currentAccount);
+};
+
+// Create username login for each account
 const createUsernames = function (accounts) {
   accounts.forEach(account => {
     account.username = account.owner
@@ -143,19 +156,12 @@ btnLogin.addEventListener('click', event => {
   }!`;
   containerApp.style.opacity = '1';
 
-  // Display all the movements in screen
-  displayMovements(currentAccount);
-
-  // Calculate the balance for the current account and display in screen
-  calcDisplayBalance(currentAccount);
-
-  // Calculate the incomes, outcomes and interest
-  // for the current account and display in screen
-  calcDisplaySummary(currentAccount);
-
   // When logged, clear username and pin fields
   inputLoginPin.value = inputLoginUsername.value = '';
   inputLoginPin.blur();
+
+  // Update UI
+  updateUI(currentAccount);
 });
 
 // Transfer money
@@ -183,9 +189,7 @@ btnTransfer.addEventListener('click', event => {
 
   // Recalculate the balance for the current account
   currentAccount.movements.push(-amount);
-  calcDisplayBalance(currentAccount);
-  displayMovements(currentAccount);
-  calcDisplaySummary(currentAccount);
+  updateUI(currentAccount);
 
   // Clear input fields
   inputTransferTo.value = inputTransferAmount.value = '';
