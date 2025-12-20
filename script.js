@@ -83,8 +83,10 @@ const displayMovements = function (currentAccount) {
 
 // CALCULATE THE BALANCE FOR CURRENT ACCOUNT
 const calcDisplayBalance = function (currentAccount) {
-  const balance = currentAccount.movements.reduce((a, cv) => a + cv, 0);
-  labelBalance.textContent = `${balance} €`;
+  currentAccount.balance = currentAccount.movements.reduce((a, cv) => {
+    return a + cv;
+  }, 0);
+  labelBalance.textContent = `${currentAccount.balance} €`;
 };
 
 // CALCULATE THE INCOMES, OUTCOMES AND INTERESTS
@@ -160,22 +162,27 @@ btnLogin.addEventListener('click', event => {
 btnTransfer.addEventListener('click', event => {
   event.preventDefault();
 
-  // Account which will receive the transfer
-  const transferToAccount = accounts.find(acc => {
-    return acc.owner.toLowerCase() === inputTransferTo.value.toLowerCase();
-  });
-  if (!transferToAccount) return console.log('User does not exists!');
+  // Value to be transfer
+  const amount = Number(inputTransferAmount.value);
 
-  // Check if the value to transfer is greater than the actual balance
-  const balance = currentAccount.movements.reduce((acc, mov) => acc + mov, 0);
-  if (+inputTransferAmount.value > balance)
+  // Check if it's greater than 0
+  if (amount <= 0) return console.log('Enter a positive number!');
+
+  // Account which will receive the transfer
+  const receiverAccount = accounts.find(acc => {
+    return acc.username.toLowerCase() === inputTransferTo.value.toLowerCase();
+  });
+  if (!receiverAccount) return console.log('User does not exists!');
+
+  // Check if current user has enough money
+  if (amount > currentAccount.balance)
     return console.log('Not sufficient founds!');
 
   // If not, make the transfer
-  transferToAccount.movements.push(+inputTransferAmount.value);
+  receiverAccount.movements.push(amount);
 
   // Recalculate the balance for the current account
-  currentAccount.movements.push(-+inputTransferAmount.value);
+  currentAccount.movements.push(-amount);
   calcDisplayBalance(currentAccount);
   displayMovements(currentAccount);
   calcDisplaySummary(currentAccount);
