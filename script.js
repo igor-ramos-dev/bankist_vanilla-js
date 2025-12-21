@@ -196,6 +196,34 @@ btnTransfer.addEventListener('click', event => {
   inputTransferAmount.blur();
 });
 
+// Delete account
+btnClose.addEventListener('click', event => {
+  event.preventDefault();
+
+  // Check if user to be deleted is the same as current user
+  // if not, return error message
+  const isCurrentUser = currentAccount.username === inputCloseUsername.value;
+  const isCurrentPin = currentAccount.pin === Number(inputClosePin.value);
+  if (!isCurrentUser && !isCurrentPin)
+    return console.log('Wrong username and pin!');
+  if (!isCurrentUser) return console.log('Wrong username!');
+  if (!isCurrentPin) return console.log('Wrong pin!');
+
+  // Index of account to be deleted
+  const indexToBeDeleted = accounts.findIndex(
+    acc => acc.username === inputCloseUsername.value
+  );
+
+  // Delete account
+  accounts.splice(indexToBeDeleted, 1);
+  console.log(accounts);
+
+  // Clear fields
+  inputCloseUsername.value = inputClosePin.value = '';
+
+  // Log user out (remove UI)
+  containerApp.style.opacity = '0';
+});
 /////////////////////////////////////////////////
 // LECTURES
 
