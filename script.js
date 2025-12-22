@@ -247,7 +247,9 @@ btnLoan.addEventListener('click', event => {
 
   // Make the loan and store in the movements array
   currentAccount.movements.push(loanAmount);
-  console.log(currentAccount.movements);
+
+  // Update UI with new loan amount
+  updateUI(currentAccount);
 });
 
 /////////////////////////////////////////////////
