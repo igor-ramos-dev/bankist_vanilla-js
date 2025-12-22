@@ -162,6 +162,8 @@ btnLogin.addEventListener('click', event => {
 
   // Update UI
   updateUI(currentAccount);
+
+  console.log(currentAccount.movements);
 });
 
 // Transfer money
@@ -224,6 +226,30 @@ btnClose.addEventListener('click', event => {
   // Log user out (remove UI)
   containerApp.style.opacity = '0';
 });
+
+// Get a loan
+btnLoan.addEventListener('click', event => {
+  event.preventDefault();
+
+  // Store the request loan
+  const loanAmount = Number(inputLoanAmount.value);
+
+  // Check if there is at least one deposit with 10% of the value of the loan
+  const thereIsTenPercentDeposit = currentAccount.movements.some(
+    mov => loanAmount <= mov * 10
+  );
+
+  // If not, return error message
+  if (thereIsTenPercentDeposit == false)
+    return console.log(
+      'Must have at least one deposit with 10% amount of the loan'
+    );
+
+  // Make the loan and store in the movements array
+  currentAccount.movements.push(loanAmount);
+  console.log(currentAccount.movements);
+});
+
 /////////////////////////////////////////////////
 // LECTURES
 
