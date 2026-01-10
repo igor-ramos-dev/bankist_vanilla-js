@@ -252,6 +252,10 @@ btnLoan.addEventListener('click', event => {
   updateUI(currentAccount);
 });
 
+const overallBalance = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, cval) => acc + cval, 0);
+
 /////////////////////////////////////////////////
 // LECTURES
 
