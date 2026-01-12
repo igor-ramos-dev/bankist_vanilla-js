@@ -252,6 +252,29 @@ btnLoan.addEventListener('click', event => {
   updateUI(currentAccount);
 });
 
+// Sort movements
+let sortState = 0;
+// function sortMovsASC(movs) {
+//   sortState = 0 ? sortState
+// }
+btnSort.addEventListener('click', event => {
+  event.preventDefault();
+
+  const movs = currentAccount.movements;
+  sortState === 0
+    ? (sortState = 1)
+    : sortState === 1
+    ? (sortState = 2)
+    : (sortState = 0);
+
+  console.log(sortState);
+  if (sortState === 0) return movs.sort((a, b) => a - b);
+  if (sortState === 1) return movs.sort((a, b) => a + b);
+  if (sortState === 2) return movs;
+
+  updateUI(currentAccount);
+});
+
 const overallBalance = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, cval) => acc + cval, 0);
